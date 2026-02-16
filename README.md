@@ -1,42 +1,42 @@
-# Simple Blog (Laravel + React)
+# Простой блог (Laravel + React)
 
-Stack: Laravel API, MySQL, Nginx, React (Vite). Docker Compose is used for local development.
+Стек: Laravel API, MySQL, Nginx, React (Vite). Docker Compose используется для локального запуска.
 
-## Prerequisites
-- Docker Desktop (or compatible engine) running
+## Требования
+- Запущенный Docker Desktop (или совместимый движок)
 - Docker Compose v2
 
-## Quick start
+## Быстрый старт
 ```bash
-# 1) copy env
+# 1) скопировать env
 cp backend/.env.example backend/.env
 
-# 2) build & start containers
+# 2) собрать и поднять контейнеры
 docker compose up --build -d
 
-# 3) install backend dependencies inside the PHP container
+# 3) установить зависимости бэкенда внутри PHP-контейнера
 docker compose exec app composer install
 
-# 4) generate app key
+# 4) сгенерировать ключ приложения
 docker compose exec app php artisan key:generate
 
-# 5) run migrations & seed sample data
+# 5) применить миграции и сиды
 docker compose exec app php artisan migrate --seed
 ```
 
-Services:
+Сервисы:
 - API: http://localhost:8080/api/articles
 - Frontend (Vite dev server): http://localhost:5173
 
-The frontend uses `VITE_API_URL` (set in `docker-compose.yml`) to talk to the API. If you run the frontend outside Docker, set `VITE_API_URL=http://localhost:8080/api` in `frontend/.env`.
+Фронтенд использует `VITE_API_URL` (задано в `docker-compose.yml`) для общения с API. Если запускать фронтенд вне Docker, задайте `VITE_API_URL=http://localhost:8080/api` в `frontend/.env`.
 
-## Useful commands
-- Tail Laravel logs: `docker compose exec app tail -f storage/logs/laravel.log`
-- Run tests: `docker compose exec app php artisan test`
-- Stop stack: `docker compose down`
+## Полезные команды
+- Логи Laravel: `docker compose exec app tail -f storage/logs/laravel.log`
+- Тесты: `docker compose exec app php artisan test`
+- Остановка стека: `docker compose down`
 
-## What’s included
-- REST endpoints for articles (CRUD) and posting comments under `/api`.
-- Migrations for `articles` and `comments`.
-- Seeder with a few sample articles and comments.
-- React UI: list, detail with comments, and forms to add articles/comments.
+## Что внутри
+- REST-эндпоинты для статей (CRUD) и добавления комментариев под `/api`.
+- Миграции для таблиц `articles` и `comments`.
+- Сид с несколькими тестовыми статьями и комментариями.
+- React UI: список статей, страница статьи с комментариями и формы добавления статей/комментариев.
