@@ -30,7 +30,11 @@ jobs:
 
       - name: Run backend feature tests
         working-directory: backend
-        run: php artisan test --without-tty
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+        run: php artisan test --without-tty --env=testing
 
       - name: Setup Node
         uses: actions/setup-node@v4

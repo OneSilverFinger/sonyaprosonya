@@ -1,6 +1,6 @@
-# Простой блог (Laravel + React)
+﻿# Простой блог (Laravel + React)
 
-Стек: Laravel API, MySQL, Nginx, React (Vite). Docker Compose используется для локального запуска.
+Стек: Laravel API, MySQL, Nginx, React (Vite). Docker Compose поднимает production-подобное окружение: Nginx раздаёт собранный фронт из `frontend/dist`, а `/api` проксируется на PHP-FPM.
 
 ## Требования
 - Запущенный Docker Desktop (или совместимый движок)
@@ -8,35 +8,35 @@
 
 ## Быстрый старт
 ```bash
-# 1) скопировать env
+# 1) Скопировать env
 cp backend/.env.example backend/.env
 
-# 2) собрать и поднять контейнеры
+# 2) Поднять стек и собрать фронт (frontend-build отработает автоматически)
 docker compose up --build -d
 
-# 3) установить зависимости бэкенда внутри PHP-контейнера
-docker compose exec app composer install
+# 3) Установить зависимости бэкенда
+docker compose exec app composer install --no-interaction
 
-# 4) сгенерировать ключ приложения
-docker compose exec app php artisan key:generate
+# 4) Сгенерировать ключ приложения
+docker compose exec app php artisan key:generate --ansi
 
-# 5) применить миграции и сиды
+# 5) Применить миграции и сиды
 docker compose exec app php artisan migrate --seed
 ```
 
-Сервисы:
+URL:
+- Frontend (статика из Nginx): http://localhost:8080/
 - API: http://localhost:8080/api/articles
-- Frontend (Vite dev server): http://localhost:5173
-
-Фронтенд использует `VITE_API_URL` (задано в `docker-compose.yml`) для общения с API. Если запускать фронтенд вне Docker, задайте `VITE_API_URL=http://localhost:8080/api` в `frontend/.env`.
 
 ## Полезные команды
 - Логи Laravel: `docker compose exec app tail -f storage/logs/laravel.log`
-- Тесты: `docker compose exec app php artisan test`
-- Остановка стека: `docker compose down`
+- Запуск тестов: `docker compose exec -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: app php artisan test`
+- Пересобрать фронт вручную: `docker compose run --rm frontend-build`
+- Остановить стек: `docker compose down`
 
 ## Что внутри
-- REST-эндпоинты для статей (CRUD) и добавления комментариев под `/api`.
-- Миграции для таблиц `articles` и `comments`.
-- Сид с несколькими тестовыми статьями и комментариями.
-- React UI: список статей, страница статьи с комментариями и формы добавления статей/комментариев.
+- REST API для статей (CRUD) и комментариев под `/api`, пагинация на списке.
+- Миграции + сидер на 3–5 статей с комментариями.
+- CORS включён (HandleCors, config/cors.php) и возвращает Access-Control-Allow-* для API.
+- React UI: список с пагинацией, страница статьи с комментариями, формы добавления статьи/комментария, всплывающие ошибки.
+- GitHub Actions (`.github/workflows/ci.yml`) прогоняет PHP feature-тесты и сборку фронтенда.
