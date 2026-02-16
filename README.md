@@ -27,10 +27,11 @@ docker compose exec app php artisan migrate --seed
 URL:
 - Frontend (статика из Nginx): http://localhost:8080/
 - API: http://localhost:8080/api/articles
+- MySQL: localhost:3306 (DB/USER/PASS `blog`)
 
 ## Полезные команды
 - Логи Laravel: `docker compose exec app tail -f storage/logs/laravel.log`
-- Запуск тестов: `docker compose exec -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: app php artisan test`
+- Запуск тестов (sqlite in-memory): `docker compose exec -e APP_ENV=testing app php artisan test`
 - Пересобрать фронт вручную: `docker compose run --rm frontend-build`
 - Остановить стек: `docker compose down`
 
