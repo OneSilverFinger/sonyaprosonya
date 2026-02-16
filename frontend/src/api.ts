@@ -16,6 +16,22 @@ export type Article = {
   comments_count?: number;
 };
 
+export type Paginated<T> = {
+  data: T[];
+  meta: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  };
+  links: {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+  };
+};
+
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -27,16 +43,49 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
   });
 
+  const contentType = response.headers.get('content-type') ?? '';
+
   if (!response.ok) {
-    const message = await response.text();
-    throw new Error(message || `Request failed with status ${response.status}`);
+    let message = `Request failed with status ${response.status}`;
+
+    try {
+      if (contentType.includes('application/json')) {
+        const body = await response.json();
+        message =
+          body.message ??
+          (body.errors ? Object.values<string[]>(body.errors).flat()[0] : undefined) ??
+          message;
+      } else {
+        const text = await response.text();
+        if (text) {
+          message = text;
+        }
+      }
+    } catch (_) {
+      // ignore parse errors and fall back to default message
+    }
+
+    throw new Error(message);
   }
 
-  return response.json() as Promise<T>;
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  if (contentType.includes('application/json')) {
+    return response.json() as Promise<T>;
+  }
+
+  return (await response.text()) as unknown as T;
 }
 
-export function fetchArticles() {
-  return request<Article[]>('/articles');
+export function fetchArticles(page = 1, perPage = 6) {
+  const params = new URLSearchParams({
+    page: String(page),
+    per_page: String(perPage),
+  });
+
+  return request<Paginated<Article>>(`/articles?${params.toString()}`);
 }
 
 export function fetchArticle(id: string | number) {

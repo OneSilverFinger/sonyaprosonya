@@ -3,6 +3,7 @@ import type { FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { addComment, fetchArticle } from '../api';
 import type { Article, Comment } from '../api';
+import { useToast } from '../toast';
 
 function ArticlePage() {
   const { id } = useParams();
@@ -11,13 +12,17 @@ function ArticlePage() {
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ author_name: '', content: '' });
   const [submitting, setSubmitting] = useState(false);
+  const toast = useToast();
 
   const loadArticle = () => {
     if (!id) return;
     setLoading(true);
     fetchArticle(id)
       .then(setArticle)
-      .catch((err) => setError(err.message))
+      .catch((err) => {
+        setError(err.message);
+        toast.push(err.message, 'error');
+      })
       .finally(() => setLoading(false));
   };
 
@@ -39,14 +44,16 @@ function ArticlePage() {
         prev
           ? {
               ...prev,
-              comments: [...(prev.comments ?? []), comment],
+              comments: [comment, ...(prev.comments ?? [])],
               comments_count: (prev.comments_count ?? 0) + 1,
             }
           : prev,
       );
       setForm({ author_name: '', content: '' });
+      toast.push('Комментарий добавлен', 'success');
     } catch (err: any) {
       setError(err.message);
+      toast.push(err.message, 'error');
     } finally {
       setSubmitting(false);
     }

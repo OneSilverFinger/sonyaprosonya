@@ -7,13 +7,29 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = min(max($request->integer('per_page') ?? 6, 1), 50);
+
         $articles = Article::withCount('comments')
             ->latest()
-            ->get();
+            ->paginate($perPage);
 
-        return response()->json($articles);
+        return response()->json([
+            'data' => $articles->items(),
+            'meta' => [
+                'current_page' => $articles->currentPage(),
+                'last_page' => $articles->lastPage(),
+                'per_page' => $articles->perPage(),
+                'total' => $articles->total(),
+            ],
+            'links' => [
+                'first' => $articles->url(1),
+                'last' => $articles->url($articles->lastPage()),
+                'prev' => $articles->previousPageUrl(),
+                'next' => $articles->nextPageUrl(),
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -30,7 +46,11 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        $article->load('comments');
+        $article->load(['comments' => function ($query) {
+            $query->latest();
+        }]);
+
+        $article->loadCount('comments');
 
         return response()->json($article);
     }

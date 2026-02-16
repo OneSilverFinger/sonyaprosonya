@@ -2,15 +2,21 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createArticle } from '../api';
+import { useToast } from '../toast';
 
 function NewArticlePage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ title: '', content: '' });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!form.title.trim() || !form.content.trim()) {
+      toast.push('Заполните заголовок и текст', 'error');
+      return;
+    }
     setSubmitting(true);
     setError(null);
     try {
@@ -18,9 +24,11 @@ function NewArticlePage() {
         title: form.title.trim(),
         content: form.content.trim(),
       });
+      toast.push('Статья опубликована', 'success');
       navigate(`/articles/${article.id}`);
     } catch (err: any) {
       setError(err.message);
+      toast.push(err.message, 'error');
     } finally {
       setSubmitting(false);
     }
