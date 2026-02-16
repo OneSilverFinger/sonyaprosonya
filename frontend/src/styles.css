@@ -190,6 +190,10 @@ button:hover:not(:disabled) {
   box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
 }
 
+.comment-submit {
+  margin-top: 6px;
+}
+
 .error {
   color: #f87171;
   font-weight: 600;

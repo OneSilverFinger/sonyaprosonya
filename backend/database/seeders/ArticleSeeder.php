@@ -11,25 +11,25 @@ class ArticleSeeder extends Seeder
     {
         $articles = [
             [
-                'title' => 'Getting started with the blog',
-                'content' => 'This demo blog shows how the API and frontend work together. Feel free to add your own posts and comments to see the flow end to end.',
+                'title' => 'Старт блога',
+                'content' => 'Демо показывает, как API и фронтенд работают вместе. Добавляйте свои статьи и комментарии, чтобы пройти весь цикл.',
                 'comments' => [
-                    ['author_name' => 'Admin', 'content' => 'Welcome aboard!'],
+                    ['author_name' => 'Админ', 'content' => 'Добро пожаловать!'],
                 ],
             ],
             [
-                'title' => 'Laravel API basics',
-                'content' => 'Laravel makes building JSON APIs fast with resource routing, validation, and Eloquent models. This sample keeps things intentionally simple.',
+                'title' => 'Основы Laravel API',
+                'content' => 'Laravel ускоряет создание JSON‑API: ресурсные маршруты, валидация и модели Eloquent. Здесь всё намеренно упрощено.',
                 'comments' => [
-                    ['author_name' => 'Nina', 'content' => 'Thanks for the concise example.'],
-                    ['author_name' => 'Leo', 'content' => 'Excited to hack on this.'],
+                    ['author_name' => 'Нина', 'content' => 'Спасибо за короткий пример.'],
+                    ['author_name' => 'Лёва', 'content' => 'Хочу покрутить это приложение.'],
                 ],
             ],
             [
-                'title' => 'React frontend notes',
-                'content' => 'The React app uses Vite and fetches data from the API. It provides article listing, detail view with comments, and forms to add new content.',
+                'title' => 'Заметки по React',
+                'content' => 'Фронтенд на Vite получает данные из API: список статей, детальная страница с комментариями и формы добавления.',
                 'comments' => [
-                    ['author_name' => 'Sam', 'content' => 'UI looks clean!'],
+                    ['author_name' => 'Сэм', 'content' => 'UI выглядит аккуратно!'],
                 ],
             ],
         ];

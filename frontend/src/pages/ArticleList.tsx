@@ -16,7 +16,7 @@ function ArticleList() {
   }, []);
 
   if (loading) {
-    return <p>Loading articles...</p>;
+    return <p>Загружаем статьи…</p>;
   }
 
   if (error) {
@@ -30,7 +30,7 @@ function ArticleList() {
           <div className="card-meta">
             <span>{new Date(article.created_at).toLocaleDateString()}</span>
             {article.comments_count !== undefined && (
-              <span>{article.comments_count} comments</span>
+              <span>{article.comments_count} комментариев</span>
             )}
           </div>
           <h2>{article.title}</h2>

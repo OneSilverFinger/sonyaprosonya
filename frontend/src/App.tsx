@@ -8,11 +8,11 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <Link to="/" className="brand">
-          Simple Blog
+          Простой блог
         </Link>
         <nav className="nav-links">
-          <Link to="/">Articles</Link>
-          <Link to="/new">Add Article</Link>
+          <Link to="/">Статьи</Link>
+          <Link to="/new">Новая статья</Link>
         </nav>
       </header>
 

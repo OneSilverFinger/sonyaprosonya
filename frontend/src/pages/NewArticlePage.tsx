@@ -28,31 +28,31 @@ function NewArticlePage() {
 
   return (
     <section className="card form">
-      <h2>New Article</h2>
+      <h2>Новая статья</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>
-          Title
+          Заголовок
           <input
             type="text"
             value={form.title}
             required
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            placeholder="Post title"
+            placeholder="Название статьи"
           />
         </label>
         <label>
-          Content
+          Содержание
           <textarea
             value={form.content}
             required
             onChange={(e) => setForm({ ...form, content: e.target.value })}
-            placeholder="Write your story..."
+            placeholder="Напишите текст статьи..."
             rows={6}
           />
         </label>
         <button type="submit" disabled={submitting}>
-          {submitting ? 'Saving...' : 'Publish'}
+          {submitting ? 'Сохраняем…' : 'Опубликовать'}
         </button>
       </form>
     </section>

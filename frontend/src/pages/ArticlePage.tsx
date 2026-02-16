@@ -52,9 +52,9 @@ function ArticlePage() {
     }
   };
 
-  if (loading) return <p>Loading article...</p>;
+  if (loading) return <p>Загружаем статью…</p>;
   if (error) return <p className="error">{error}</p>;
-  if (!article) return <p>Article not found.</p>;
+  if (!article) return <p>Статья не найдена.</p>;
 
   return (
     <article className="article-page">
@@ -62,7 +62,7 @@ function ArticlePage() {
         <div className="card-meta">
           <span>{new Date(article.created_at).toLocaleString()}</span>
           {article.comments_count !== undefined && (
-            <span>{article.comments_count} comments</span>
+            <span>{article.comments_count} комментариев</span>
           )}
         </div>
         <h1>{article.title}</h1>
@@ -70,7 +70,7 @@ function ArticlePage() {
       </div>
 
       <section className="comments">
-        <h3>Comments</h3>
+        <h3>Комментарии</h3>
         <div className="comment-list">
           {(article.comments ?? []).map((comment) => (
             <div className="comment" key={comment.id}>
@@ -81,33 +81,33 @@ function ArticlePage() {
               <p>{comment.content}</p>
             </div>
           ))}
-          {(article.comments ?? []).length === 0 && <p>No comments yet.</p>}
+          {(article.comments ?? []).length === 0 && <p>Пока нет комментариев.</p>}
         </div>
 
         <form className="card form" onSubmit={handleSubmit}>
-          <h4>Add a comment</h4>
+          <h4>Добавить комментарий</h4>
           <label>
-            Name
+            Имя
             <input
               type="text"
               value={form.author_name}
               onChange={(e) => setForm({ ...form, author_name: e.target.value })}
               required
-              placeholder="Your name"
+              placeholder="Ваше имя"
             />
           </label>
           <label>
-            Comment
+            Комментарий
             <textarea
               value={form.content}
               onChange={(e) => setForm({ ...form, content: e.target.value })}
               required
-              placeholder="Share your thoughts"
+              placeholder="Поделитесь мнением"
               rows={4}
             />
           </label>
-          <button type="submit" disabled={submitting}>
-            {submitting ? 'Posting...' : 'Post comment'}
+          <button type="submit" disabled={submitting} className="comment-submit">
+            {submitting ? 'Отправляем…' : 'Отправить комментарий'}
           </button>
         </form>
       </section>
